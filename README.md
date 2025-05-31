@@ -72,7 +72,11 @@ Email - string
 E-postadress
 
 ## Felhantering
-CSV-filen saknas - 500	{ "error": "CSV-filen saknas." }  
-Ogiltig limit (t.ex. 0 eller negativt) 400 { "error": "Limit måste vara ett positivt heltal." }  
-Filen är tom eller ogiltig 204 (Ingen responskropp)  
+| Felscenario                                 | Statuskod | Svar                |
+|--------------------------------------------|-----------|---------------------|
+| CSV-filen saknas eller inte hittas         | `500`     | `{ "error": "CSV-filen saknas." }` |
+| `limit` är mindre än 1                     | `400`     | `{ "error": "Limit måste vara ett positivt heltal." }` |
+| CSV-filen är tom eller inga giltiga rader  | `204`     | (tomt svar)         |
+---
+
 
