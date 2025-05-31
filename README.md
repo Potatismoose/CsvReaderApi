@@ -34,19 +34,20 @@ Möjlighet finns att lägga till en frivillig parameter för att hämta begräns
 GET /api/data?limit=10
 
 ## Exempel på JSON respons
-[  
-  {  
-    "name": "Alice",  
-    "age": 28,  
-    "email": "alice@example.com"  
-  },  
-  {  
-    "name": "Bea",  
-    "age": 12,  
-    "email": "bea@example.com"  
-  }  
-]  
-
+```json
+[
+  {
+    "name": "Alice",
+    "age": 28,
+    "email": "alice@example.com"
+  },
+  {
+    "name": "Bea",
+    "age": 12,
+    "email": "bea@example.com"
+  }
+]
+```
 ## Filstruktur CSV filen
 Semikolonseparerade rader enligt nedan format  
 1;Alice;28;alice@example.com  
