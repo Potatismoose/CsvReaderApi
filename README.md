@@ -50,10 +50,11 @@ GET /api/data?limit=10
 ```
 ## Filstruktur CSV filen
 Semikolonseparerade rader enligt nedan format  
+```csv
 1;Alice;28;alice@example.com  
 2;Bea;12;bea@example.com  
 3;Ceasar;56;ceasar@example.com  
-
+```
 ### Kolumnbeskrivning
 Id - int  
 Intern identifierare (visas ej i API)
