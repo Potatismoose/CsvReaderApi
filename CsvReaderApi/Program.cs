@@ -10,6 +10,8 @@ namespace CsvReaderApi
 
             builder.Services.AddControllers();
             builder.Services.AddScoped<ICsvService, CsvService>();
+            builder.Services.AddScoped<IFileReader, FileReader>();
+            builder.Services.AddScoped<IParsePerson, ParsePerson>();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 

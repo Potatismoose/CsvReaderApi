@@ -2,46 +2,30 @@
 
 namespace CsvReaderApi.Services;
 
-public class CsvService : ICsvService
+public class CsvService(IConfiguration config, IFileReader fileReader, IParsePerson personParser) : ICsvService
 {
-    private readonly string _filePath;
-    private readonly CsvHeaderIndex _index = new();
+    private readonly IConfiguration _config = config;
+    private readonly IFileReader _fileReader = fileReader;
+    private readonly IParsePerson _personParser = personParser;
 
-    public CsvService(IConfiguration configuration)
+    public List<PersonDto> ReadFileData(int? limit)
     {
-        _filePath = configuration["Csv:FilePath"] ?? throw new Exception("CSV filsökvägen är inte konfigurerad");
-    }
+        var path = _config["Csv:FilePath"] ?? throw new Exception("CSV-filsökvägen saknas");
 
-    public List<Person> ReadFileData()
-    {
-        if (!File.Exists(_filePath))
-            throw new FileNotFoundException("CSV-filen kunde inte hittas.");
-
-        var lines = File.ReadAllLines(_filePath);
-        if (lines.Length == 0)
-            return Enumerable.Empty<Person>().ToList();
-
-        return lines
-            .Select(ParseLine)
+        var parsed = _fileReader
+            .ReadLines(path)
+            .Select(_personParser.Parse)
             .Where(p => p is not null)
             .Select(p => p!)
-            .ToList();
-    }
+            .Select(p => new PersonDto
+            {
+                Name = p.Name,
+                Age = p.Age,
+                Email = p.Email
+            });
 
-    private Person? ParseLine(string line)
-    {
-        var parts = line.Split(';');
-
-        if (parts.Length != 4) return null;
-        if (!int.TryParse(parts[_index.Id], out int id)) return null;
-        if (!int.TryParse(parts[_index.Age], out int age)) return null;
-
-        return new Person
-        {
-            Id = id,
-            Name = parts[_index.Name],
-            Age = age,
-            Email = parts[_index.Email]
-        };
+        return limit is int l and > 0
+            ? parsed.Take(l).ToList()
+            : parsed.ToList();
     }
 }

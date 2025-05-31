@@ -4,35 +4,34 @@ using CsvReaderApi.Services;
 namespace CsvReaderApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public class CsvController : ControllerBase
+[Route("api/data")]
+public class CsvController(ICsvService csvService) : ControllerBase
 {
-    private readonly ICsvService _csvService;
-
-    public CsvController(ICsvService csvService)
-    {
-        _csvService = csvService;
-    }
+    private readonly ICsvService _csvService = csvService;
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public IActionResult Get([FromQuery] int? limit)
+    public IActionResult GetPersons([FromQuery] int? limit)
     {
         try
         {
-            if (limit.HasValue && limit.Value <= 0)
-                return BadRequest(new { error = "Limit måste vara ett positivt heltal." });
+            if (limit is int l && l <= 0)
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Ogiltig parameter",
+                    Status = 400,
+                    Detail = "Limit måste vara ett positivt heltal."
+                });                    
 
-            var data = _csvService.ReadFileData();
+            var data = _csvService.ReadFileData(limit);
 
-            if (!data.Any())
+            if (data.Count == 0)
                 return NoContent();
 
-            var result = limit is int l ? data.Take(l) : data;
-            return Ok(result);
+            return Ok(data);
         }
         catch (FileNotFoundException)
         {
