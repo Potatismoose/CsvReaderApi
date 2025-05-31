@@ -17,7 +17,13 @@ dotnet build
 dotnet run  
 
 ## Testa applikationen via swagger eller postman
+Swagger  
 https://localhost:5001/swagger  
+Postman  
+https://localhost:7232/api/data?limit=10 
+
+
+Ingen Auth krävs
 
 ### Endpoint
 Hämta alla rader  
@@ -28,18 +34,18 @@ Möjlighet finns att lägga till en frivillig parameter för att hämta begräns
 GET /api/data?limit=10
 
 ## Exempel på JSON respons
-[
-  {
-    "name": "Alice",
-    "age": 28,
-    "email": "alice@example.com"
-  },
-  {
-    "name": "Bea",
-    "age": 12,
-    "email": "bea@example.com"
-  }
-]
+[  
+  {  
+    "name": "Alice",  
+    "age": 28,  
+    "email": "alice@example.com"  
+  },  
+  {  
+    "name": "Bea",  
+    "age": 12,  
+    "email": "bea@example.com"  
+  }  
+]  
 
 ## Filstruktur CSV filen
 Semikolonseparerade rader enligt nedan format  
